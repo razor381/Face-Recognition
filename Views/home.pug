@@ -1,0 +1,76 @@
+mixin attribute(name, result, percentage, showPerc=true)
+  .attribute
+    .text
+      span.result= name
+      span.class
+        span= result
+        if showPerc
+          - const roundUp = val => (Math.round(val * 100)) / 100
+          span(id="#{name}") &nbsp;(#{roundUp(percentage)}%)
+    .bar
+      .progress(style=`width: ${percentage}%;`)
+      .empty
+
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="/css/style.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Montserrat")
+    title Face Analysis
+  body
+    script.
+      const hello = 30;
+
+    .main-wrapper
+      .card-wrapper
+        .upload-wrapper
+          h1.logo FACE ANALYZER
+          ANALYZER
+          img#view-input-image.images-wrapper(
+            src=`${uploadedImg || "/images/placeholder.png"}`
+          )
+          form#image-form.interface-wrapper(method="POST" action="/analyze-face" enctype="multipart/form-data")
+            label(for="image").button.file-button UPLOAD IMAGE
+            input#image(type="file" accept="image/*" name="image" hidden required)
+            button#analyze-button.button.send-button(type="submit") ANALYZE
+
+        .detail-wrapper
+          if Gender
+            .group.group-2
+              .attribute-area
+                - const ageAvg = Math.trunc((AgeRange.Low + AgeRange.High) / 2);
+                +attribute('Age', ageAvg, ageAvg, false)
+                +attribute('Gender', Gender.Value, Gender.Confidence)
+                +attribute('Eyeglasses', Eyeglasses.Value, Eyeglasses.Confidence)
+                +attribute('Beard', Beard.Value, Beard.Confidence)
+
+            .group.group-3
+              .attribute-area
+                +attribute('Mustache', Mustache.Value, Mustache.Confidence)
+                +attribute('Smile', Smile.Value, Smile.Confidence)
+                +attribute('Eyesopen', EyesOpen.Value, EyesOpen.Confidence)
+                +attribute('Mouthopen', MouthOpen.Value, MouthOpen.Confidence)
+
+            .group.group-4
+              .canvas-wrapper
+                canvas#myChart(
+                  width="500"
+                  height="400"
+                  data-emotions=emotions
+                  data-bounding-box=boundingBox
+                  data-organs=landmarks
+                )
+
+            .group.group-1
+              .facial-wrapper
+                img.facial-image(src=`${uploadedImg || "/images/image2.jpg"}`)
+                .overlay
+                canvas#facepoints.face-mapper(width="500" height="400")
+
+          else
+            h1.no-image-msg= message
+
+    script(src="/js/bundle.js")
+

@@ -1,0 +1,42 @@
+{
+  "name": "lab3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+    "build": "parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/razor381/Face-Recognition.git"
+  },
+  "author": "Rujal Shrestha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/razor381/Face-Recognition/issues"
+  },
+  "homepage": "https://github.com/razor381/Face-Recognition#readme",
+  "dependencies": {
+    "aws-sdk": "^2.763.0",
+    "axios": "^0.20.0",
+    "babel-polyfill": "^6.26.0",
+    "chart": "^0.1.2",
+    "chart.js": "^2.9.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "nodemon": "^2.0.4",
+    "parcel": "^1.12.4",
+    "pug": "^3.0.0",
+    "sharp": "^0.26.1",
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}
