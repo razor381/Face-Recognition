@@ -25,6 +25,6 @@ module.exports = (image) => new Promise((resolve, reject) => {
     if (err) {
       return reject(err);
     }
-    return resolve(data.FaceDetails[0]);
+    return resolve({ analysis: data.FaceDetails[0], raw: data.FaceDetails });
   });
 });

@@ -46,7 +46,7 @@ exports.getHome = (req, res) => {
 
 exports.analyzeFace = async (req, res) => {
   try {
-    const analysis = await rekognize(req.file.buffer);
+    const { analysis, raw } = await rekognize(req.file.buffer);
     const allowedFields = [
       'AgeRange',
       'Smile',
@@ -71,6 +71,7 @@ exports.analyzeFace = async (req, res) => {
       emotions: emotionObj,
       boundingBox: analysis.BoundingBox,
       landmarks: landmarkObj,
+      raw,
     });
   } catch (err) {
     res.status(400).render('home', {

@@ -80,14 +80,17 @@ if (barChart) {
     const WIDTH = 500;
     const HEIGHT = 400;
 
-    ctx.strokeStyle = '#CCFF00';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(
-      WIDTH * box.Left,
-      HEIGHT * box.Top,
-      WIDTH * box.Width,
-      HEIGHT * box.Height,
-    );
+    const boundFace = (boundBox) => {
+      ctx.strokeStyle = '#CCFF00';
+      ctx.strokeRect(
+        WIDTH * boundBox.Left,
+        HEIGHT * boundBox.Top,
+        WIDTH * boundBox.Width,
+        HEIGHT * boundBox.Height,
+      );
+    };
+
+    boundFace(box);
 
     const mapPoints = (arr) => {
       ctx.strokeStyle = '#FFFFFF';
@@ -100,56 +103,82 @@ if (barChart) {
       ctx.stroke();
     };
 
-    const organPoints = {
-      leftBrowPoints: [
-        organs.leftEyeBrowLeft,
-        organs.leftEyeBrowRight,
-        organs.leftEyeBrowUp,
-      ],
-      rightBrowPoints: [
-        organs.rightEyeBrowLeft,
-        organs.rightEyeBrowRight,
-        organs.rightEyeBrowUp,
-      ],
-      rightEyePoints: [
-        organs.rightEyeLeft,
-        organs.rightEyeUp,
-        organs.rightEyeRight,
-        organs.rightEyeDown,
-        organs.rightEyeLeft,
-        organs.rightPupil,
-        organs.eyeRight,
-      ],
-      leftEyePoints: [
-        organs.leftEyeLeft,
-        organs.leftEyeUp,
-        organs.leftEyeRight,
-        organs.leftEyeDown,
-        organs.leftEyeLeft,
-        organs.leftPupil,
-        organs.eyeLeft,
-      ],
-      mouthPoints: [
-        organs.mouthLeft,
-        organs.mouthUp,
-        organs.mouthRight,
-        organs.mouthDown,
-        organs.mouthLeft,
-      ],
-      nose: [
-        organs.noseLeft,
-        organs.nose,
-        organs.noseRight,
-      ],
-      face: [
-        organs.upperJawlineLeft,
-        organs.midJawlineLeft,
-        organs.chinBottom,
-        organs.midJawlineRight,
-        organs.upperJawlineRight,
-      ],
+    const getOrganPoints = (faceObj) => {
+      const resultObj = {
+        leftBrowPoints: [
+          faceObj.leftEyeBrowLeft,
+          faceObj.leftEyeBrowRight,
+          faceObj.leftEyeBrowUp,
+        ],
+        rightBrowPoints: [
+          faceObj.rightEyeBrowLeft,
+          faceObj.rightEyeBrowRight,
+          faceObj.rightEyeBrowUp,
+        ],
+        rightEyePoints: [
+          faceObj.rightEyeLeft,
+          faceObj.rightEyeUp,
+          faceObj.rightEyeRight,
+          faceObj.rightEyeDown,
+          faceObj.rightEyeLeft,
+          faceObj.rightPupil,
+          faceObj.eyeRight,
+        ],
+        leftEyePoints: [
+          faceObj.leftEyeLeft,
+          faceObj.leftEyeUp,
+          faceObj.leftEyeRight,
+          faceObj.leftEyeDown,
+          faceObj.leftEyeLeft,
+          faceObj.leftPupil,
+          faceObj.eyeLeft,
+        ],
+        mouthPoints: [
+          faceObj.mouthLeft,
+          faceObj.mouthUp,
+          faceObj.mouthRight,
+          faceObj.mouthDown,
+          faceObj.mouthLeft,
+        ],
+        nose: [
+          faceObj.noseLeft,
+          faceObj.nose,
+          faceObj.noseRight,
+        ],
+        face: [
+          faceObj.upperJawlineLeft,
+          faceObj.midJawlineLeft,
+          faceObj.chinBottom,
+          faceObj.midJawlineRight,
+          faceObj.upperJawlineRight,
+        ],
+      };
+      return resultObj;
     };
 
+    const organPoints = getOrganPoints(organs);
+
     Object.values(organPoints).forEach((arrPoints) => mapPoints(arrPoints));
+
+    const onlyFaces = JSON.parse(barChart.dataset.raw).map((el) => el.Landmarks);
+    const arrOrganPoints = onlyFaces.map((el) => {
+      const result = {};
+
+      el.forEach((prop) => {
+        result[prop.Type] = { x: prop.X, y: prop.Y };
+      });
+
+      return result;
+    });
+
+    arrOrganPoints.forEach((el) => {
+      const elPoints = getOrganPoints(el);
+      Object.values(elPoints).forEach((arrPoints) => mapPoints(arrPoints));
+    });
+
+    const onlyBoundBoxes = JSON.parse(barChart.dataset.raw).map((el) => el.BoundingBox);
+    onlyBoundBoxes.forEach((each) => {
+      boundFace(each);
+    });
   }
 }
